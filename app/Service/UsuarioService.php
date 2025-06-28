@@ -7,14 +7,14 @@
 
     class UsuarioService implements UsuarioRepository
     {
-        private $model;
+       protected UsuarioModel $model;
 
-        public function __construct(UsuarioModel $model) {
-            $this->model = $model;
+        public function __construct() {
+            $this->model = new UsuarioModel();
         }
 
         public function salvar(array $request)
-        {
+        {            
             return $this->model->insert($request);
         }
     }
