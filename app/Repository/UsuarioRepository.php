@@ -8,4 +8,5 @@
     {
         public function salvar(array $request): int | bool;
         public function listar(): array;
+        public function apagar(int $id): bool;
     }

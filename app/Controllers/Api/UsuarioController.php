@@ -19,10 +19,10 @@
             $this->service = service('usuarioService');
         }
 
-         public function listar(): Response
-         {
-            return $this->respond($this->service->listar(), 200);
-         }
+        public function listar(): Response
+        {
+           return $this->respond($this->service->listar(), 200);
+        }
 
         public function salvar()
         {
@@ -36,5 +36,14 @@
             $this->service->salvar($dados);
 
             return $this->respondCreated($dados);
+        }
+
+        public function apagar(int $id)
+        {        
+            if($this->service->apagar($id)) {
+                return $this->respondNoContent('Usuário remvovido com sucesso'); 
+            } else {
+                return $this->failNotFound("Ocorreu um erro e a operação não foi concluída");
+            }                    
         }
     }

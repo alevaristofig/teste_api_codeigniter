@@ -22,4 +22,18 @@
         {            
             return $this->model->insert($request);
         }
+
+        public function apagar(int $id): bool
+        {
+            
+            $usuario = $this->model->find($id);
+
+            if(!$usuario) {
+                return false;
+            }
+
+            $this->model->delete($id);
+
+            return true;
+        }
     }
