@@ -3,7 +3,7 @@
     namespace App\Controllers\Api;
     
     use CodeIgniter\API\ResponseTrait;
-    use CodeIgniter\Config\Factories;
+    use CodeIgniter\HTTP\Response;
     use App\Controllers\BaseController;
     use App\Service\UsuarioService;
 
@@ -16,10 +16,13 @@
 
         public function __construct()
         {
-            $this->service = service('usuarioService');//Factories::class(UsuarioService::class);
-            //new UsuarioService();
-            //
+            $this->service = service('usuarioService');
         }
+
+         public function listar(): Response
+         {
+            return $this->respond($this->service->listar(), 200);
+         }
 
         public function salvar()
         {
@@ -30,6 +33,8 @@
                 "status" => $this->request->getPost('status'),
             ];
 
-           return $this->respondCreated($this->service->salvar($dados));
+            $this->service->salvar($dados);
+
+            return $this->respondCreated($dados);
         }
     }

@@ -2,7 +2,10 @@
 
     namespace App\Repository;
 
+    use CodeIgniter\HTTP\Response;
+
     interface UsuarioRepository 
     {
-        public function salvar(array $request);
+        public function salvar(array $request): int | bool;
+        public function listar(): array;
     }

@@ -13,7 +13,12 @@
             $this->model = new UsuarioModel();
         }
 
-        public function salvar(array $request)
+        public function listar(): array
+        {
+            return $this->model->findAll();
+        }
+
+        public function salvar(array $request): int | bool
         {            
             return $this->model->insert($request);
         }
