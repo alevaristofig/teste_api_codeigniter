@@ -6,12 +6,12 @@
     use CodeIgniter\HTTP\Response;
     use App\Controllers\BaseController;
     use App\Service\UsuarioService;
+    use App\Validation\FormValidation;
 
     class UsuarioController extends BaseController
     {
         use ResponseTrait;
          
-        //protected UsuarioService $service;
         protected UsuarioModel $model;
 
         public function __construct()
@@ -24,7 +24,7 @@
            return $this->respond($this->service->listar(), 200);
         }
 
-        public function salvar()
+        public function salvar(): Response
         {
              $dados = [
                 "nome" => $this->request->getPost('nome'),
@@ -33,28 +33,37 @@
                 "status" => $this->request->getPost('status'),
             ];
 
+
+            if(!$this->validateData($dados,FormValidation::regras())) {
+                return $this->fail("Ocorreu um erro e a operação não foi concluída", 500);
+            }
+
             $this->service->salvar($dados);
 
             return $this->respondCreated($dados);
         }
 
-        public function atualizar(int $id)
+        public function atualizar(int $id): Response
         {
             $dados = $this->request->getRawInput();
+
+            if(!$this->validateData($dados,FormValidation::regras())) {
+                return $this->fail("Ocorreu um erro e a operação não foi concluída", 500);
+            }
 
             if($this->service->atualizar($id,$dados)){
                 return $this->respond($dados, 200);
             } else {
-                return $this->failNotFound("Ocorreu um erro e a operação não foi concluída");
+                return $this->fail("Ocorreu um erro e a operação não foi concluída", 500);                
             }           
         }
 
-        public function apagar(int $id)
+        public function apagar(int $id): Response
         {        
             if($this->service->apagar($id)) {
                 return $this->respondNoContent('Usuário remvovido com sucesso'); 
             } else {
-                return $this->failNotFound("Ocorreu um erro e a operação não foi concluída");
+                return $this->fail("Ocorreu um erro e a operação não foi concluída", 500);                
             }                    
         }
     }
