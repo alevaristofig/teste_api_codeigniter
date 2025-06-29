@@ -20,7 +20,7 @@ use CodeIgniter\Shield\Authentication\Authenticators\JWT;
 /**
  * JWT Authenticator Configuration
  */
-class AuthJWT extends ShieldAuthJWT//BaseConfig
+class AuthJWT extends ShieldAuthJWT
 {
     /**
      * --------------------------------------------------------------------

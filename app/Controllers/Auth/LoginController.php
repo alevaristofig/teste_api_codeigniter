@@ -1,56 +1,44 @@
 <?php
 
-    declare(strict_types=1);
-
     namespace App\Controllers\Auth;
 
     use App\Controllers\BaseController;
     use CodeIgniter\API\ResponseTrait;
-    use CodeIgniter\HTTP\ResponseInterface;
+    use Firebase\JWT\JWT;
+    use Firebase\JWT\Key;
+    use App\Models\UsuarioModel;
 
-    class LoginController extends BAseController
+    class LoginController extends BaseController
     {
         use ResponseTrait;
 
-        public function jwtLogin(): ResponseInterface
-        {
-            $rules = $this->getValidationRules();
-            
-            if (!$this->validateData($this->request->getJSON(true), $rules, [], config('Auth')->DBGroup)) {
-                return $this->fail(
-                    ['errors' => $this->validator->getErrors()],
-                    $this->codes['unauthorized']
-                );
+        public function login() 
+        {            
+        
+            $data = $this->request->getJSON(true);
+
+            $model = new UsuarioModel();
+
+            $user = $model->where('email', $data['email'])->first();
+
+            if (!$user || !password_verify($data['password'], $user['senha'])) {               
+                return $this->failUnauthorized('Usuário ou senha inválidos');
             }
 
-            $credentials             = $this->request->getJsonVar(setting('Auth.validFields'));
-            $credentials             = array_filter($credentials);
-            $credentials['password'] = $this->request->getJsonVar('password');
+            $token = $this->generateJWT($user);
 
-            $authenticator = auth('session')->getAuthenticator();
-
-            $result = $authenticator->check($credentials);
-
-            if (!$result->isOK()) {            
-                return $this->failUnauthorized($result->reason());
-            }
-
-            $user = $result->extraInfo();
-
-            $manager = service('jwtmanager');
-
-            $jwt = $manager->generateToken($user);
-
-            return $this->respond([
-                'access_token' => $jwt,
-            ]);
+            return $this->respond(['token' => $token],200);
         }
 
-        protected function getValidationRules(): array
+        private function generateJWT($user)
         {
-            $rules = new ValidationRules();
+            $key = 'tVQbkTlPp6QFxxbk+KACohSYOKPqOdBatqVjCunM6lI=';
+            $payload = [
+                'sub' => $user['id'],
+                'iat' => time(),
+                'exp' => time() + 3600,
+            ];
 
-            return $rules->getLoginRules();
+            return JWT::encode($payload, $key, 'HS256');
         }
-
-    }
+}
