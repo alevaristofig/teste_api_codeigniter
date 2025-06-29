@@ -13,9 +13,11 @@
         use ResponseTrait;
          
         protected UsuarioModel $model;
+        private $session;
 
         public function __construct()
         {
+            $this->session = session();
             $this->service = service('usuarioService');
         }
 
@@ -65,5 +67,5 @@
             } else {
                 return $this->fail("Ocorreu um erro e a operação não foi concluída", 500);                
             }                    
-        }
+        }        
     }

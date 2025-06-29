@@ -13,8 +13,8 @@
         use ResponseTrait;
 
         public function login() 
-        {            
-        
+        {              
+            $session = session();                
             $data = $this->request->getJSON(true);
 
             $model = new UsuarioModel();
@@ -25,9 +25,20 @@
                 return $this->failUnauthorized('Usuário ou senha inválidos');
             }
 
-            $token = $this->generateJWT($user);
+            $token = $this->generateJWT($user);            
+
+            $session->set('token', $token);
 
             return $this->respond(['token' => $token],200);
+        }
+
+        public function logout() 
+        {
+            if (session()->has('token')) {
+                session()->remove('token');
+                
+                return $this->respond(['msg' => 'Usuário Deslogado'],200);
+            }
         }
 
         private function generateJWT($user)

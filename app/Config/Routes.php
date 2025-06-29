@@ -7,15 +7,14 @@ use App\Controllers\Auth\LoginController;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index');
 
-//service('auth')->routes($routes);
+$routes->post('usuarios/login','Auth\LoginController::login');
 
-$routes->post('/usuarios/login','Auth\LoginController::login');
+$routes->group('api', ['filter' => 'jwtFilter'], static function($routes) {
+    $routes->get('usuarios', 'Api\UsuarioController::listar');    
+    $routes->post('/usuarios','Api\UsuarioController::salvar');
+    $routes->delete('/usuarios/(.*)','Api\UsuarioController::apagar/$1');
+    $routes->put('/usuarios/(.*)','Api\UsuarioController::atualizar/$1');
+    $routes->get('usuarios/logout','Auth\LoginController::logout');
+});
 
-$routes->get('/usuarios','Api\UsuarioController::listar');
-$routes->post('/usuarios','Api\UsuarioController::salvar');
-$routes->delete('/usuarios/(.*)','Api\UsuarioController::apagar/$1');
-$routes->put('/usuarios/(.*)','Api\UsuarioController::atualizar/$1');
-
-//service('auth')->routes($routes);
