@@ -38,6 +38,17 @@
             return $this->respondCreated($dados);
         }
 
+        public function atualizar(int $id)
+        {
+            $dados = $this->request->getRawInput();
+
+            if($this->service->atualizar($id,$dados)){
+                return $this->respond($dados, 200);
+            } else {
+                return $this->failNotFound("Ocorreu um erro e a operação não foi concluída");
+            }           
+        }
+
         public function apagar(int $id)
         {        
             if($this->service->apagar($id)) {

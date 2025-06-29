@@ -23,9 +23,19 @@
             return $this->model->insert($request);
         }
 
-        public function apagar(int $id): bool
+        public function atualizar(int $id, array $request): int | bool
         {
-            
+            $usuario = $this->model->find($id);
+
+            if(!$usuario) {
+                return false;
+            }
+
+            return $this->model->update($id,$request);
+        }
+
+        public function apagar(int $id): bool
+        {            
             $usuario = $this->model->find($id);
 
             if(!$usuario) {

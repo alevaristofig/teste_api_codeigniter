@@ -12,3 +12,4 @@ $routes->get('/', 'Home::index');
 $routes->get('/usuarios','Api\UsuarioController::listar');
 $routes->post('/usuarios','Api\UsuarioController::salvar');
 $routes->delete('/usuarios/(.*)','Api\UsuarioController::apagar/$1');
+$routes->put('/usuarios/(.*)','Api\UsuarioController::atualizar/$1');
