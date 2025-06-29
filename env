@@ -69,3 +69,5 @@ database.tests.DBCollat = utf8mb4_general_ci
 #--------------------------------------------------------------------
 
 # logger.threshold = 4
+
+authjwt.keys.default.0.secret = tVQbkTlPp6QFxxbk+KACohSYOKPqOdBatqVjCunM6lI=
