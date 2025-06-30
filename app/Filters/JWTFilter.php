@@ -15,7 +15,7 @@ class JWTFilter implements FilterInterface
     {                
         $session = session();   
 
-        if($session->get('token') != null) {
+        if($session->get('token') == null) {
              return Services::response()->setStatusCode(401)->setBody('E preciso estar autenticado!');
         }
 

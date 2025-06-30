@@ -25,6 +25,11 @@
            return $this->respond($this->service->listar(), 200);
         }
 
+        public function buscar(string $id): Response
+        {
+           return $this->respond($this->service->buscar($id), 200);
+        }
+
         public function salvar(): Response
         {
              $dados = [

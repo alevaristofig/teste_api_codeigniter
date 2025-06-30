@@ -18,8 +18,14 @@
             return $this->model->findAll();
         }
 
+        public function buscar(string $id): array | null
+        {
+            return $this->model->find($id);
+        }
+
         public function salvar(array $request): int | bool
-        {            
+        {     
+            $request['senha'] = password_hash($request['senha'],PASSWORD_DEFAULT);                
             return $this->model->insert($request);
         }
 
