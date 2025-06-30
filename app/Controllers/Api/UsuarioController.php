@@ -32,13 +32,7 @@
 
         public function salvar(): Response
         {
-             $dados = [
-                "nome" => $this->request->getPost('nome'),
-                "email" => $this->request->getPost('email'),
-                "senha" => $this->request->getPost('senha'),
-                "status" => $this->request->getPost('status'),
-            ];
-
+            $dados = $this->request->getRawInput();
 
             if(!$this->validateData($dados,FormValidation::regras())) {
                 return $this->fail("Ocorreu um erro e a operação não foi concluída", 500);
