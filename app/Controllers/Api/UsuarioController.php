@@ -17,7 +17,6 @@
 
         public function __construct()
         {
-            $this->session = session();
             $this->service = service('usuarioService');
         }
 

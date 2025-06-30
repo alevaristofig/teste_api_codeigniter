@@ -13,6 +13,12 @@ class JWTFilter implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)
     {                
+        $session = session();   
+
+        if($session->get('token') != null) {
+             return Services::response()->setStatusCode(401)->setBody('E preciso estar autenticado!');
+        }
+
         $authHeader = $request->getHeaderLine('Authorization');
         if (! str_starts_with($authHeader, 'Bearer ')) {
             return Services::response()->setStatusCode(401)->setBody('Token não encontrado');
